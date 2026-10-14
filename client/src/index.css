@@ -1,0 +1,39 @@
+/* Colors used by App.css - light mode */
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --text: #1d2130;
+  --muted: #6b7185;
+  --border: #dde1ea;
+  --accent: #4f46e5;
+  --error-bg: #fdecec;
+  --error-text: #a12020;
+
+  font-family: system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* Dark mode, when Windows/browser is set to dark */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171e;
+    --surface: #1f222c;
+    --text: #e8eaf0;
+    --muted: #9aa0b4;
+    --border: #2f3342;
+    --accent: #6366f1;
+    --error-bg: #3a1d1f;
+    --error-text: #ffb4b4;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
