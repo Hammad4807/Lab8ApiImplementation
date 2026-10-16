@@ -23,8 +23,9 @@ builder.Services.AddHttpClient<IChatService, GroqChatService>();
 builder.Services.AddSingleton<DocumentStore>();
 builder.Services.AddScoped<IRagService, RagService>();
 
-// CORS: allow the React app (a different origin) to call this API from the browser
-// Both addresses are needed: the browser treats localhost and 127.0.0.1 as different origins
+// CORS: allow the React app (a separate repo, deployed on its own domain) to call this API from the browser
+// Locally both addresses are needed: the browser treats localhost and 127.0.0.1 as different origins
+// In production, set the deployed front-end URL with the environment variable Cors__AllowedOrigins__0
 string[] allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
     ?? new[] { "http://localhost:5173" };
 builder.Services.AddCors(options =>
@@ -59,5 +60,8 @@ app.UseSwaggerUI();
 
 // 4. Endpoint execution (FluentValidation runs here, before the action)
 app.MapControllers();
+
+// Simple health check for the hosting platform (and to test that the API is reachable)
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
 app.Run();
