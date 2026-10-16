@@ -15,8 +15,6 @@ namespace Lab8ApiImplementation.Controllers
             _chatService = chatService;
         }
 
-        // POST /api/chat
-        // ChatRequestValidator checks the request before this method runs
         [HttpPost]
         public async Task<IActionResult> Send(ChatRequest request)
         {

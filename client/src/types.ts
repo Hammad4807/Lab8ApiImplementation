@@ -32,8 +32,28 @@ export interface ProblemDetails {
   errors?: Record<string, string[]>
 }
 
+// C#: RagSource - one passage that was put into the prompt ([1], [2], ...)
+export interface RagSource {
+  number: number
+  source: string
+  text: string
+  score: number
+}
+
+// C#: RagResponse
+export interface RagResponse {
+  answer: string
+  sources: RagSource[]
+  usage: ChatUsage
+}
+
+// Which endpoint the app talks to: normal chat or RAG over the Acme docs
+export type Mode = 'chat' | 'docs'
+
 // A message shown on screen. Assistant messages also remember
 // how many messages were sent to get that reply (history on/off)
+// and, in docs mode, which passages the answer was based on
 export interface DisplayMessage extends ChatMessage {
   sentCount?: number
+  sources?: RagSource[]
 }
