@@ -34,7 +34,7 @@ namespace Lab8ApiImplementation.Services
             _http.Timeout = TimeSpan.FromSeconds(30);
         }
 
-        public async Task<ChatResponse> SendAsync(List<ChatMessage> messages)
+        public async Task<ChatResponse> SendAsync(List<ChatMessage> messages, string? systemPrompt = null, double? temperature = null)
         {
             // Checked here, not in the constructor: the constructor runs before validation,
             // so throwing there would turn every 400 validation error into a 500
@@ -43,17 +43,20 @@ namespace Lab8ApiImplementation.Services
                 throw new InvalidOperationException("GROQ_API_KEY is not set. Use Manage User Secrets to set it.");
             }
 
-            // Our system prompt always goes first, then the conversation from the client
+            // The system prompt always goes first, then the conversation.
+            // ?? = use the caller's prompt if given, otherwise the normal chat prompt from appsettings.json
             var allMessages = new List<ChatMessage>();
-            allMessages.Add(new ChatMessage { Role = "system", Content = _systemPrompt });
+            allMessages.Add(new ChatMessage { Role = "system", Content = systemPrompt ?? _systemPrompt });
             allMessages.AddRange(messages);
 
             var body = new
             {
                 model = _model,
                 max_completion_tokens = _maxCompletionTokens,
-                // gpt-oss "thinks" before answering, and thinking uses tokens too - keep it short
-                reasoning_effort = "low",
+                // 1.0 is Groq's default; RAG passes a low value (0.2) so answers stick to the facts
+                temperature = temperature ?? 1.0,
+                //// gpt-oss "thinks" before answering, and thinking uses tokens too - keep it short
+                //reasoning_effort = "low",
                 messages = allMessages
             };
 

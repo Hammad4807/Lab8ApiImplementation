@@ -55,6 +55,27 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* ---------- Mode switch (Chat / Ask Acme docs) ---------- */
+.mode-switch {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.mode-switch button {
+  flex: 1;
+  background: transparent;
+  color: var(--text);
+}
+
+.mode-switch button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
 /* ---------- History switch ---------- */
 .history-bar {
   display: flex;
@@ -136,6 +157,49 @@ button:disabled {
 .message-text {
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+/* Suggested questions on the empty docs screen */
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* ---------- RAG sources under an answer ---------- */
+.sources {
+  margin-top: 8px;
+  font-size: 0.85rem;
+}
+
+.sources summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.source {
+  margin-top: 6px;
+  padding: 8px;
+  border-left: 3px solid var(--accent);
+  background: var(--bg);
+  border-radius: 4px;
+}
+
+.source-title {
+  font-weight: 600;
+}
+
+.score {
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: 6px;
+}
+
+.source-text {
+  white-space: pre-wrap;
+  color: var(--muted);
 }
 
 .thinking {

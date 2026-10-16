@@ -12,4 +12,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.3.0" />
   </ItemGroup>
 
+  <!-- RAG knowledge base: copy the .txt docs next to the built app so they can be read at runtime -->
+  <ItemGroup>
+    <None Update="Data\Docs\*.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

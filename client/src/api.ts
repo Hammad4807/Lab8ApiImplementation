@@ -1,4 +1,4 @@
-import type { ChatMessage, ChatResponse, ProblemDetails } from './types'
+import type { ChatMessage, ChatResponse, ProblemDetails, RagResponse } from './types'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5079'
 
@@ -10,6 +10,16 @@ export async function sendChat(messages: ChatMessage[]): Promise<ChatResponse> {
     body: JSON.stringify({ messages }),
   })
   return (await res.json()) as ChatResponse
+}
+
+// POST /api/rag/ask - answers from the Acme documents only
+export async function askDocs(question: string): Promise<RagResponse> {
+  const res = await callApi(`${API_URL}/api/rag/ask`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question }),
+  })
+  return (await res.json()) as RagResponse
 }
 
 // GET /api/crash - always fails on purpose, to test ErrorHandlingMiddleware
@@ -37,7 +47,7 @@ async function callApi(url: string, options: RequestInit): Promise<Response> {
   // Error responses from our API are ProblemDetails JSON
   const problem = (await res.json().catch(() => null)) as ProblemDetails | null
 
-  // 400: validation errors -> show the messages from ChatRequestValidator
+  // 400: validation errors -> show the messages from ChatRequestValidator / RagRequestValidator
   if (res.status === 400 && problem?.errors) {
     const messages = Object.values(problem.errors).flat()
     throw new Error(messages.join(' '))
